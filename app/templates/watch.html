@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block header %}
+    <title>{{ video_info['title'] }}</title>
+{% endblock %}
+{% block content %}
+    <video id="video" width="100%" controls>
+        <source src="{{ video_info['video_url'] }}">
+    </video>
+    <h1 id="title">{{ video_info['title'] }}</h1>
+    <a id="channel_link" href="/channel/{{ video_info['channel_id'] }}">{{ video_info['channel_title'] }}</a>
+    <p id="timestamp">{{ video_info['raw']['upload_date'] }}</p>
+    <a href="{{ video_info['audio_only']['url'] }}" target="_blank" download="{{ video_info['title'] }}.{{ video_info['audio_only']['ext'] }}">Audio</a>
+    <p id="description" style="white-space: pre-wrap;">{{ video_info['description'] }}</p>
+    {% if playlist_info['videos'] %}
+    <a href="/playlist?list={{ playlist_info['youtube_id'] }}&page={{ playlist_info['current_page'] }}">Playlist</a>
+    <div id="playlist">
+    {% for video in playlist_info['videos']['response']['continuationContents']['playlistVideoListContinuation']['contents'] %}
+        <div id="playlist_item">
+            <a href="/watch?v={{ video['playlistVideoRenderer']['videoId'] }}&list={{ playlist_info['youtube_id'] }}&index={{ video['playlistVideoRenderer']['index']['runs'][0]['text'] }}">
+                <img style="width: 200px;" class="thumbnail" src="https://i4.ytimg.com/vi/{{ video['playlistVideoRenderer']['videoId'] }}/hqdefault.jpg"><br>
+                {{ video['playlistVideoRenderer']['index']['runs'][0]['text'] }}.
+                {{ video['playlistVideoRenderer']['title']['runs'][0]['text'] }}
+            </a>
+        </div>
+    {% endfor %}
+    {% endif %}
+    </div>
+{% endblock %}

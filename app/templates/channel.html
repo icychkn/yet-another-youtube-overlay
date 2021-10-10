@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block header %}
+    <title>{{ channel_info['title'] }}</title>
+{% endblock %}
+{% block content %}
+    <h2>{{ channel_info['title'] }}</h2><form method='post' action='/follow?channel_id={{ channel_info['youtube_id'] }}&follow={{ not is_followed }}'><button type='submit'>{% if not is_followed %}follow{% else %}unfollow{% endif %}</button></form>
+    {% if videos == [] %}
+        <form method='post' action='/cache_channel?channel_id={{ channel_info['youtube_id'] }}&cache=1'><button type='submit'>Cache</button></form>
+    {% else %}
+        <form method='post' action='/cache_channel?channel_id={{ channel_info['youtube_id'] }}&cache=0'><button type='submit'>Uncache</button></form>
+    {% endif %}
+        <p style='white-space: pre-wrap;'>{{ channel_info['description'] }}</p>
+    {% if current_page > 1 %}
+        <a href="/channel/{{ channel_info['youtube_id'] }}?page={{ current_page - 1 }}">previous page</a>
+    {% endif %}
+    {% if videos['response']['continuationContents']['playlistVideoListContinuation']['contents']|length == 20 %}
+        <a href="/channel/{{ channel_info['youtube_id'] }}?page={{ current_page + 1 }}">next page</a>
+    {% endif %}
+    <div class="video_list">
+    {% for video in videos['response']['continuationContents']['playlistVideoListContinuation']['contents'] %}
+        <p><a href="/watch?v={{ video['playlistVideoRenderer']['videoId'] }}"><img class="thumbnail" src="https://i4.ytimg.com/vi/{{ video['playlistVideoRenderer']['videoId'] }}/hqdefault.jpg"><br>{{ video['playlistVideoRenderer']['title']['runs'][0]['text'] }}</a></p>
+    {% endfor %}
+    </div>
+    {% if videos != [] %}
+    {% if current_page > 1 %}
+        <a href="/channel/{{ channel_info['youtube_id'] }}?page={{ current_page - 1 }}">previous page</a>
+    {% endif %}
+    {% if videos['response']['continuationContents']['playlistVideoListContinuation']['contents']|length == 20 %}
+        <a href="/channel/{{ channel_info['youtube_id'] }}?page={{ current_page + 1 }}">next page</a>
+    {% endif %}
+    {% endif %}
+{% endblock %}

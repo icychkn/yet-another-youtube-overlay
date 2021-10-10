@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block header %}
+    <title>{{ playlist_info['title'] }}</title>
+{% endblock %}
+{% block content %}
+    {% if playlist_info['current_page'] > 1 %}
+    <a href="/playlist?list={{ playlist_info['youtube_id'] }}&page={{ playlist_info['current_page'] - 1 }}">previous page</a>
+    {% endif %}
+    {% if playlist_info['videos']['response']['continuationContents']['playlistVideoListContinuation']['contents']|length == 20 %}
+    <a href="/playlist?list={{ playlist_info['youtube_id'] }}&page={{ playlist_info['current_page'] + 1 }}">next page</a>
+    {% endif %}
+    <div class="video_list">
+    {% for video in playlist_info['videos']['response']['continuationContents']['playlistVideoListContinuation']['contents'] %}
+        <p>
+            <a href="/watch?v={{ video['playlistVideoRenderer']['videoId'] }}&list={{ playlist_info['youtube_id'] }}&index={{ video['playlistVideoRenderer']['index']['runs'][0]['text'] }}">
+                <img class="thumbnail" src="https://i4.ytimg.com/vi/{{ video['playlistVideoRenderer']['videoId'] }}/hqdefault.jpg"><br>
+                {{ video['playlistVideoRenderer']['index']['runs'][0]['text'] }}.
+                {{ video['playlistVideoRenderer']['title']['runs'][0]['text'] }}
+            </a>
+        </p>
+    {% endfor %}
+    </div>
+{% endblock %}

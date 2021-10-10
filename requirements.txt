@@ -1,0 +1,6 @@
+bs4==0.0.1
+Flask==1.1.2
+Jinja2==2.11.2
+requests==2.26.0
+requests-html==0.10.0
+youtube-dl==2021.6.6

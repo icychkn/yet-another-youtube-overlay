@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block header %}
+<title>Main Page</title>
+{% endblock %}
+{% block content %}
+<h1>Index</h1>
+{% for channel in followed_channels %}
+<a href='/channel/{{ channel['youtube_id'] }}'>{{ channel['info']['title'] }}</a><br>
+{% endfor %}
+{% endblock %}
