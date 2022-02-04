@@ -5,7 +5,7 @@ I wanted to experiment with an overlay that doesn't rely on a dedicated database
 project uses nothing more complex than plaintext files storing JSON serialized data to store raw responses from requests to
 Youtube.
 
-(I have not done any testing of this in Windows so I cannot guarentee it will work without modification)
+(I have not done any testing of this in Windows so I cannot guarantee it will work without modification)
 
 WARNING: This is NOT production ready, it is merely a personal project.
 
