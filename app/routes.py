@@ -9,12 +9,25 @@ import app.handler as handler
 # atm it only contains links to channels listed in the followed directory
 @app.route('/')
 def index():
+    # creates a list in the format of:
+    # [ {'info': <channel_a_info>, 'youtube_id': <channel_a_id>}, {'info': <channel_b_info>, 'youtube_id': <channel_b_info'} ...]
+    # for every channel previously followed
     followed_channels = [{'info': handler.get_channel_info(x), 'youtube_id': x} for x in handler.get_followed()]
 
     return render_template('index.html', followed_channels = followed_channels)
 
 
-# overlay for youtube.com/embed/
+# overlay for youtu.be
+@app.route('/<string:youtube_id>')
+def direct(youtube_id : str):
+    if youtube_id == 'favicon.ico':
+        abort(404)
+    video = handler.get_video(youtube_id)
+
+    return render_template('embed.html', video = video)
+
+
+# overlay for youtube.com/embed/<video_id>
 @app.route('/embed/<string:youtube_id>')
 def embed(youtube_id : str):
     video = handler.get_video(youtube_id)
@@ -29,14 +42,13 @@ def watch():
     video_id = request.args.get('v') or 'dQw4w9WgXcQ'
 
     video_info = handler.get_video(video_id)
-    audio_only = [x for x in video_info['raw']['formats'] if x['format_id'] == '251'][0]
-    video_info['audio_only'] = audio_only
+    video_info['audio_only'] = [x for x in video_info['raw']['formats'] if x['format_id'] == '251'][0]
 
     playlist_id = request.args.get('list') or ''
     playlist_index = int(request.args.get('index') or 1)
     playlist_page = int((playlist_index - playlist_index % 20) / 20) + 1
     playlist_videos = []
-    if 'list' in request.args:
+    if playlist_id:
         playlist_videos = handler.get_playlist_videos(playlist_id, playlist_page)
     playlist_info = { 'youtube_id': playlist_id, 'current_index': playlist_index, 'current_page': playlist_page, 'videos': playlist_videos }
 
@@ -82,3 +94,10 @@ def follow_channel():
 
     return redirect(url_for('channel', channel_id = channel_id))
 
+
+# exports the list of subscriptions in a format newpipe can import
+@app.route('/export_newpipe_subscription')
+def export_newpipe_subscription():
+    followed_channels = [{'info': handler.get_channel_info(x), 'youtube_id': x} for x in handler.get_followed()]
+
+    return render_template('newpipe_subscription.json', followed_channels = followed_channels)
