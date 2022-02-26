@@ -4,6 +4,7 @@
 {% endblock %}
 {% block content %}
 <h1>Index</h1>
+<a href='/export_newpipe_subscription'>Export Newpipe Subscriptions</a><br><br>
 {% for channel in followed_channels %}
 <a href='/channel/{{ channel['youtube_id'] }}'>{{ channel['info']['title'] }}</a><br>
 {% endfor %}
