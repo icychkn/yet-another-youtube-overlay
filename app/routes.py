@@ -95,7 +95,6 @@ def follow_channel():
     return redirect(url_for('channel', channel_id = channel_id))
 
 
-# exports the list of subscriptions in a format newpipe can import
 @app.route('/export_newpipe_subscription')
 def export_newpipe_subscription():
     followed_channels = [{'info': handler.get_channel_info(x), 'youtube_id': x} for x in handler.get_followed()]
