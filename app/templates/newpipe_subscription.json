@@ -1,0 +1,16 @@
+{
+    "app_version": "0.21.16",
+    "app_version_int": 982,
+    "subscriptions": [
+        {% for channel in followed_channels %}
+        {
+            "service_id": 0,
+            "url": "https://www.youtube.com/channel/{{ channel['youtube_id'] }}",
+            "name": "{{ channel['info']['title'] }}"
+        }
+        {% if not loop.last %}
+        ,
+        {% endif %}
+        {% endfor %}
+    ]
+}
