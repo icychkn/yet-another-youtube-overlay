@@ -4,7 +4,7 @@
 {% endblock %}
 {% block content %}
     <video id="video" width="100%" controls>
-        <source src="{{ video_info['video_url'] }}">
+	    <source src="{{ video_info['video_url'] }}" type="video/mp4">
     </video>
     <h1 id="title">{{ video_info['title'] }}</h1>
     <a id="channel_link" href="/channel/{{ video_info['channel_id'] }}">{{ video_info['channel_title'] }}</a>
