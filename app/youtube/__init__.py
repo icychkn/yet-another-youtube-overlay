@@ -11,13 +11,14 @@ ydl = YoutubeDL(options)
 ydl.add_default_info_extractors()
 
 
-session = HTMLSession()
-session.browser
-
-
 def get_soup(url):
+    session = HTMLSession()
+    session.browser
+
     response = session.get(url)
     response.html.render(keep_page = True)
+
+    session.close()
 
     return BeautifulSoup(response.html.html, 'html.parser')
 
